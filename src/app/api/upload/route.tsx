@@ -28,24 +28,27 @@ export async function POST(req: any, res: any) {
 
     const formData = await req.formData();
     const file: File = formData.get('file')
-    const filePath = `./public/file/${file.name}`;
+    const filePath = path.join(process.cwd(), `public/file/${file.name}`);
 
     const buffer = Buffer.from(await file.arrayBuffer())
+    console.log(path.join(process.cwd(), 'public/file'))
+
+    const fileDir = path.join(process.cwd(), 'public/file')
 
     try {
 
-        if (!fs.existsSync('./public/file')) {
-            fs.mkdirSync('./public/file')
+        if (!fs.existsSync(fileDir)) {
+            fs.mkdirSync(path.join('public/file'), { recursive: true })
         }
 
-        await writeFileSync(filePath, buffer)
+        await writeFileSync(filePath, buffer) 
     } catch (e) {
     }
 
     const zip = new AdmZip(filePath)
-    zip.extractAllTo('./public/file', true)
+    zip.extractAllTo(fileDir, true)
 
-    const streamingHistory: Song[] = JSON.parse(fs.readFileSync('./public/file/Spotify Account Data/StreamingHistory_music_0.json', 'utf-8'))
+    const streamingHistory: Song[] = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/StreamingHistory_music_0.json"), 'utf-8'))
     const songs = streamingHistory.filter(song => song.endTime.includes('2024'))
 
     function topCategoryEntries(songs: Song[], key: 'artistName' | 'trackName', limit: number) {
@@ -81,7 +84,7 @@ export async function POST(req: any, res: any) {
     .map((minutes, i) => ({ artist: allTimeUniqueArtists[i], minutes: Math.floor(minutes) })).sort((a, b) => b.minutes - a.minutes).slice(0, 10)
     
 
-    const userIdentity: Identity = JSON.parse(fs.readFileSync('./public/file/Spotify Account Data/Identity.json', 'utf-8'))
+    const userIdentity: Identity = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/Identity.json"), 'utf-8'))
     const displayName = userIdentity.displayName
     const imageUrl = userIdentity.imageUrl
 
@@ -111,7 +114,7 @@ export async function POST(req: any, res: any) {
             imageUrl
         }
     }
-    await deleteFolderRecursive('./public/file/Spotify Account Data')
+    await deleteFolderRecursive(path.join(fileDir, "Spotify Account Data"))
     await fs.unlinkSync(filePath)
 
     return NextResponse.json(data)
