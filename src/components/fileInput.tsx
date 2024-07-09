@@ -16,11 +16,11 @@ export default function FileInput({
                 className="file-input"
                 style={{ display: 'none' }} // Hide the default input
             />
-            <label htmlFor="file" className="file-input-label border-2 border-gray-400 p-2 rounded-lg w-full text-spotify-text cursor-pointer">
+            <label htmlFor="file" className="file-input-label border-2 border-gray-400 p-2 rounded-lg text-spotify-text cursor-pointer w-full">
                 Choose a file
             </label>
             {fileName && (
-                <div className="file-name mt-2 text-spotify-text" style={{ color: '#1DB954' }}> {/* Change text color here */}
+                <div className="file-name mt-2 text-spotify-text w-1/2" style={{ color: '#1DB954' }}> {/* Change text color here */}
                     Selected file: {fileName.name}
                 </div>
             )}
