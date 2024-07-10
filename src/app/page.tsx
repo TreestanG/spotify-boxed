@@ -95,7 +95,7 @@ export default function Home() {
         ) : (
           <BlurFade delay={.15} inView className="lg:w-1/3 w-full p-6">
             <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-full ">
-              <div className="min-h-[75vh] flex items-center justify-center flex-col">
+              <div className="h-[75vh] lg:h-auto flex items-center justify-center flex-col w-full">
                 <label className="flex flex-col items-center justify-center w-full">
                   <span className="text-4xl lg:text-5xl font-bold text-white">Spotify Boxed</span>
 
