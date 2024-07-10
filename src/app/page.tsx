@@ -6,6 +6,8 @@ import { useState } from "react";
 import FileInput from "@/components/fileInput";
 import { cn } from "@/lib/utils";
 import StatBox from "@/components/statBox";
+import Leaderboard from "@/components/leaderboard";
+import BlurFade from "@/components/fadeIn";
 
 
 
@@ -66,64 +68,12 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="flex gap-4 flex-col">
-                  <h2 className="text-4xl text-white font-bold">Top Stats</h2>
+                <div className="flex gap-4 flex-col max-w-full">
+                  <h2 className="text-4xl text-white font-bold pb-4">Top Stats</h2>
                   <div className="flex gap-8">
-                    <div className="border-spotify-green border rounded-xl p-6 w-1/3">
-                      <div className="flex w-full justify-between items-end">
-                        <h3 className="text-2xl text-white font-bold pb-4">Top Artists</h3>
-                        <h2 className="text-xl text-white font-bold pb-4">Plays</h2>
-                      </div>
-                      <div className="flex flex-col w-full">
-                        {
-                          Object.entries(spotifyStats!.artistAppearances).map(([artist, count], i) => {
-                            return (
-                              <div key={i} className="flex w-full justify-between text-spotify-text">
-                                <p className=" text-lg"><span className="font-semibold text-spotify-main">{i + 1}. {artist}</span></p>
-                                <p className="text-green-600">{count}</p>
-                              </div>
-                            )
-                          })
-                        }
-                      </div>
-
-                    </div>
-                    <div className="border-spotify-green border rounded-xl p-6 w-1/3">
-                      <div className="flex w-full justify-between items-end">
-                        <h3 className="text-2xl text-white font-bold pb-4">Top Songs</h3>
-                        <h2 className="text-xl text-white font-bold pb-4">Plays</h2>
-                      </div>
-                      <div className="flex flex-col w-full">
-                        {
-                          Object.entries(spotifyStats!.songAppearances).map(([song, count], i) => {
-                            return (
-                              <div key={i} className="flex w-full justify-between text-spotify-text">
-                                <p className=" text-lg"><span className="font-semibold text-spotify-main">{i + 1}. {song}</span></p>
-                                <p className="text-green-600">{count}</p>
-                              </div>
-                            )
-                          })
-                        }
-                      </div>
-                    </div>
-                    <div className="border-spotify-green border rounded-xl p-6 w-1/3">
-                      <div className="flex w-full justify-between items-end">
-                        <h3 className="text-2xl text-white font-bold pb-4">Artists By the Numbers</h3>
-                        <h2 className="text-xl text-white font-bold pb-4">Minutes</h2>
-                      </div>
-                      <div className="flex flex-col w-full">
-                        {
-                          spotifyStats!.minutesPerArtist.map(({ artist, minutes }, i) => {
-                            return (
-                              <div key={i} className="flex w-full justify-between text-spotify-text">
-                                <p className=" text-lg"><span className="font-semibold text-spotify-main">{i + 1}. {artist}</span></p>
-                                <p className="text-green-600">{minutes}</p>
-                              </div>
-                            )
-                          })
-                        }
-                      </div>
-                    </div>
+                    <BlurFade className="w-1/3" delay={.25}><Leaderboard title="Top Artists" measures="Plays" data={spotifyStats!.artistAppearances} /></BlurFade>
+                    <BlurFade className="w-1/3" delay={.5}><Leaderboard title="Top Songs" measures="Plays" data={spotifyStats!.songAppearances} /></BlurFade>
+                    <BlurFade className="w-1/3" delay={.75}><Leaderboard title="Artists By the Numbers" measures="Plays" data={Object.fromEntries(spotifyStats!.minutesPerArtist.map(c => [c.artist, c.minutes]))} /></BlurFade>
                   </div>
 
                 </div>
@@ -133,26 +83,29 @@ export default function Home() {
           </div>
 
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-full">
-            <label className="flex flex-col items-center justify-center w-full">
-              <span className="text-5xl font-bold text-spotify-main">Spotify Boxed</span>
+          <BlurFade delay={.15} inView>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-full">
+              <label className="flex flex-col items-center justify-center w-full">
+                <span className="text-5xl font-bold text-white">Spotify Boxed</span>
 
-              <FileInput setFile={setFile} fileName={file!} />
-            </label>
-            <p onClick={() => setSeeDemo(!seeDemo)} className={cn(`p-2 rounded-lg w-full mt-4 text-center hover:cursor-pointer`, seeDemo ? "text-white bg-blue-400" : "text-black bg-white")}>Toggle Demo Mode</p>
+                <FileInput setFile={setFile} fileName={file!} />
+              </label>
+              <p onClick={() => setSeeDemo(!seeDemo)} className={cn(`p-2 rounded-lg w-full mt-4 text-center hover:cursor-pointer`, seeDemo ? "text-white bg-blue-400" : "text-black bg-white hover:bg-opacity-90")}>Toggle Demo Mode</p>
 
-            <button type="submit" className="bg-spotify-green text-white p-2 rounded-lg mt-2 w-full hover:bg-green-500">Submit</button>
-            <div className="text-spotify-text pt-4 flex flex-col justify-start w-full">
-              <p className="text-lg font-semibold text-spotify-main">Instructions:</p>
-              <p className="text-lg">1. Go to your Spotify account on the website</p>
-              <p className="text-lg">2. Click on your profile icon on the top right and click &quot;Account&quot;</p>
-              <p className="text-lg">3. Scroll down to the &quot;Security and Privacy&quot; and click &quot;Privacy settings&quot; </p>
-              <p className="text-lg">4. Scroll down to &quot;Download your data&quot; and tick the checkbox under &quot;Extended streaming services&quot; </p>
-              <p className="text-lg">5. Click &quot;Request data&quot; and click on &quot;CONFIRM&quot; in the email spotify sends you</p>
-              <p className="text-lg">6. Wait a few days for the email containing your data and press download.</p>
-              <p className="text-lg">7. Upload the zip file here and enjoy :) </p>
-            </div>
-          </form>
+              <button type="submit" className="bg-spotify-green text-white p-2 rounded-lg mt-2 w-full hover:bg-green-600">Submit</button>
+              <div className="text-spotify-text pt-4 flex flex-col justify-start w-full">
+                <p className="text-lg font-semibold text-spotify-main">Instructions:</p>
+                <p className="text-lg">1. Go to your Spotify account on the website</p>
+                <p className="text-lg">2. Click on your profile icon on the top right and click &quot;Account&quot;</p>
+                <p className="text-lg">3. Scroll down to the &quot;Security and Privacy&quot; and click &quot;Privacy settings&quot; </p>
+                <p className="text-lg">4. Scroll down to &quot;Download your data&quot; and tick the checkbox under &quot;Extended streaming services&quot; </p>
+                <p className="text-lg">5. Click &quot;Request data&quot; and click on &quot;CONFIRM&quot; in the email spotify sends you</p>
+                <p className="text-lg">6. Wait a few days for the email containing your data and press download.</p>
+                <p className="text-lg">7. Upload the zip file here and enjoy :) </p>
+              </div>
+            </form>
+          </BlurFade>
+
         )
       }
 

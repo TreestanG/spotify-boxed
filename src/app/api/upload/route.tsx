@@ -44,7 +44,7 @@ export async function POST(req: any, res: any) {
             fs.mkdirSync(path.join('/tmp'), { recursive: true })
         }
 
-        await writeFileSync(filePath, buffer) 
+        await writeFileSync(filePath, buffer)
     } catch (e) {
     }
 
@@ -84,8 +84,8 @@ export async function POST(req: any, res: any) {
 
     const allTimeUniqueArtists = streamingHistory.map(c => c.artistName).filter((value, index, self) => self.indexOf(value) === index)
     const allTimeMinutesPerArtist = allTimeUniqueArtists.map(artist => streamingHistory.filter(song => song.artistName === artist).reduce((acc, song) => acc + song.msPlayed, 0) / 60000)
-    .map((minutes, i) => ({ artist: allTimeUniqueArtists[i], minutes: Math.floor(minutes) })).sort((a, b) => b.minutes - a.minutes).slice(0, 10)
-    
+        .map((minutes, i) => ({ artist: allTimeUniqueArtists[i], minutes: Math.floor(minutes) })).sort((a, b) => b.minutes - a.minutes).slice(0, 10)
+
 
     const userIdentity: Identity = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/Identity.json"), 'utf-8'))
     const displayName = userIdentity.displayName
