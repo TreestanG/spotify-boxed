@@ -118,7 +118,7 @@ export default function Home() {
                 <p className="text-lg">1. Go to your Spotify account on the website</p>
                 <p className="text-lg">2. Click on your profile icon on the top right and click &quot;Account&quot;</p>
                 <p className="text-lg">3. Scroll down to the &quot;Security and Privacy&quot; and click &quot;Privacy settings&quot; </p>
-                <p className="text-lg">4. Scroll down to &quot;Download your data&quot; and tick the checkbox under &quot;Extended streaming services&quot; </p>
+                <p className="text-lg">4. Scroll down to &quot;Download your data&quot; {/* and tick the checkbox under &quot;Extended streaming services&quot;  */}</p>
                 <p className="text-lg">5. Click &quot;Request data&quot; and click on &quot;CONFIRM&quot; in the email spotify sends you</p>
                 <p className="text-lg">6. Wait a few days for the email containing your data and press download.</p>
                 <p className="text-lg">7. Upload the zip file here and enjoy :) </p>
