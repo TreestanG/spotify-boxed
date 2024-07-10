@@ -46,7 +46,10 @@ export default function Home() {
         stats ? (
           <div className="w-full flex flex-col">
             <div className="w-full h-auto lg:h-[20rem] bg-gradient-to-t from-spotify-header-bottom to-spotify-header-top flex flex-col lg:flex-row items-center lg:pl-20 gap-8 py-6">
-              <Image src={stats.user.imageUrl} alt="user" width={250} height={250} className="w-1/2 lg:w-auto shadow-2xl rounded-full" />
+              <div>
+                <Image src={stats.user.imageUrl} objectFit="cover" alt="user" width={225} height={225} className=" shadow-2xl rounded-full" />
+
+              </div>
               <h1 className="text-white text-3xl lg:text-8xl font-extrabold">{stats.user.displayName}</h1>
             </div>
             <div className="flex text-white px-6 lg:pl-40 gap-8 text-xl w-full justify-center lg:justify-start">
