@@ -83,8 +83,8 @@ export default function Home() {
           </div>
 
         ) : (
-          <BlurFade delay={.15} inView>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-full">
+          <BlurFade delay={.15} inView className="w-1/3">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-full ">
               <label className="flex flex-col items-center justify-center w-full">
                 <span className="text-5xl font-bold text-white">Spotify Boxed</span>
 
@@ -102,6 +102,9 @@ export default function Home() {
                 <p className="text-lg">5. Click &quot;Request data&quot; and click on &quot;CONFIRM&quot; in the email spotify sends you</p>
                 <p className="text-lg">6. Wait a few days for the email containing your data and press download.</p>
                 <p className="text-lg">7. Upload the zip file here and enjoy :) </p>
+
+                  <p className="text-lg text-white pt-4">We do <span className="underline">not</span> store your data. The file uploaded is only temporary within our systems and is immediately deleted after retrieving necessary data. </p>
+
               </div>
             </form>
           </BlurFade>
