@@ -15,6 +15,7 @@ export default function Home() {
   const [stats, setStats] = useState<SpotifyData>();
   const [time, setTime] = useState('thisYear')
   const [spotifyStats, setSpotifyStats] = useState<SpotifyData['current'] | SpotifyData['allTime']>()
+  const [seeDemo, setSeeDemo] = useState(false)
 
   const handleTimeChange = () => {
     setTime(time === 'thisYear' ? 'allTime' : 'thisYear');
@@ -25,6 +26,7 @@ export default function Home() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("file", file!);
+    formData.append("demo", seeDemo ? "true" : "false")
 
     const res = await fetch("/api/upload", {
       method: "POST",
@@ -137,7 +139,9 @@ export default function Home() {
 
               <FileInput setFile={setFile} fileName={file!} />
             </label>
-            <button type="submit" className="bg-spotify-green text-white p-2 rounded-lg mt-4 w-full">Submit</button>
+            <p onClick={() => setSeeDemo(!seeDemo)} className={cn(`p-2 rounded-lg w-full mt-4 text-center hover:cursor-pointer`, seeDemo ? "text-white bg-blue-400" : "text-black bg-white")}>Toggle Demo Mode</p>
+
+            <button type="submit" className="bg-spotify-green text-white p-2 rounded-lg mt-2 w-full hover:bg-green-500">Submit</button>
             <div className="text-spotify-text pt-4 flex flex-col justify-start w-full">
               <p className="text-lg font-semibold text-spotify-main">Instructions:</p>
               <p className="text-lg">1. Go to your Spotify account on the website</p>

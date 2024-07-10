@@ -7,6 +7,12 @@ const nextConfig = {
                 hostname: 'i.scdn.co',
                 port: '',
                 pathname: '/image/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'images.fineartamerica.com',
+                port: '',
+                pathname: '/images/**'
             }
         ]
     }
