@@ -94,6 +94,7 @@ export default function Home() {
 
               <button type="submit" className="bg-spotify-green text-white p-2 rounded-lg mt-2 w-full hover:bg-green-600">Submit</button>
               <div className="text-spotify-text pt-4 flex flex-col justify-start w-full">
+                  <p className="text-lg pb-4">If you don&apos;t have your data yet, click on &quot;Toggle Demo&quot; and click submit.</p>
                 <p className="text-lg font-semibold text-spotify-main">Instructions:</p>
                 <p className="text-lg">1. Go to your Spotify account on the website</p>
                 <p className="text-lg">2. Click on your profile icon on the top right and click &quot;Account&quot;</p>
