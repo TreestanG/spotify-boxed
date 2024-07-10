@@ -6,7 +6,24 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Spotify Boxed",
-  description: "Early spotify stats!",
+  metadataBase: new URL('https://boxed.tristangee.com'),
+  description: "Spotify Wrapped for the impatient. Upload your Spotify data and get your stats instantly.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://boxed.tristangee.com",
+    siteName: "Spotify Boxed",
+    title: "Spotify Wrapped for the impatient.",
+    description: "Spotify Wrapped for the impatient. Upload your Spotify data and get your stats instantly.",
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: "Spotify_wrapped",
+      },
+    ],
+  }
 };
 
 export default function RootLayout({
