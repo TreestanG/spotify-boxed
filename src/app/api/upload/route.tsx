@@ -28,17 +28,16 @@ export async function POST(req: any, res: any) {
 
     const formData = await req.formData();
     const file: File = formData.get('file')
-    const filePath = path.join(process.cwd(), `public/file/${file.name}`);
+    const filePath = path.join(`/tmp/${file.name}`);
 
     const buffer = Buffer.from(await file.arrayBuffer())
-    console.log(path.join(process.cwd(), 'public/file'))
 
-    const fileDir = path.join(process.cwd(), 'public/file')
+    const fileDir = path.join('/tmp')
 
     try {
 
         if (!fs.existsSync(fileDir)) {
-            fs.mkdirSync(path.join('public/file'), { recursive: true })
+            fs.mkdirSync(path.join('/tmp'), { recursive: true })
         }
 
         await writeFileSync(filePath, buffer) 
