@@ -1,3 +1,5 @@
+import LetterPullup from "./letterFlip";
+
 interface LeaderboardProps {
     title: string;
     measures: string;
@@ -19,7 +21,7 @@ export default function Leaderboard({
                         return (
                             <div key={i} className="flex w-full justify-between text-spotify-text">
                                 <p className=" text-lg"><span className="font-semibold text-spotify-main">{i + 1}. {entry}</span></p>
-                                <p className="text-green-600">{count}</p>
+                                <p className="text-green-600">{count.toLocaleString()}</p>
                             </div>
                         )
                     })

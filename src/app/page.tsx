@@ -1,6 +1,6 @@
 'use client'
 
-import { SpotifyData } from "@/types/types";
+import { SpotifyData, Stats } from "@/types/types";
 import Image from "next/image";
 import { useState } from "react";
 import FileInput from "@/components/fileInput";
@@ -9,19 +9,19 @@ import StatBox from "@/components/statBox";
 import Leaderboard from "@/components/leaderboard";
 import BlurFade from "@/components/fadeIn";
 
-
+type SpotifyKeys = 'thisYear' | 'allTime' | 'lastMonth' | 'lastWeek'
 
 export default function Home() {
 
   const [file, setFile] = useState<File | null>(null);
   const [stats, setStats] = useState<SpotifyData>();
   const [time, setTime] = useState('thisYear')
-  const [spotifyStats, setSpotifyStats] = useState<SpotifyData['current'] | SpotifyData['allTime']>()
+  const [spotifyStats, setSpotifyStats] = useState<Stats>()
   const [seeDemo, setSeeDemo] = useState(false)
 
-  const handleTimeChange = () => {
-    setTime(time === 'thisYear' ? 'allTime' : 'thisYear');
-    setSpotifyStats(time === 'thisYear' ? stats!.allTime : stats!.current);
+  const handleTimeChange = (time: SpotifyKeys) => {
+    setTime(time)
+    setSpotifyStats(stats![time])
   }
 
   const handleSubmit = async (e: any) => {
@@ -37,7 +37,7 @@ export default function Home() {
 
     const data = await res.json();
     setStats(data)
-    setSpotifyStats(data.current)
+    setSpotifyStats(data.thisYear)
   }
 
   return (
@@ -52,9 +52,12 @@ export default function Home() {
               </div>
               <h1 className="text-white text-3xl lg:text-8xl font-extrabold">{stats.user.displayName}</h1>
             </div>
-            <div className="flex text-white px-6 lg:pl-40 gap-8 text-xl w-full justify-center lg:justify-start">
-              <p onClick={handleTimeChange} className={cn("pt-20 hover:underline decoration-spotify-green underline-offset-8 cursor-pointer", time === "thisYear" ? "underline" : "")}>This Year</p>
-              <p onClick={handleTimeChange} className={cn("pt-20 hover:underline decoration-spotify-green underline-offset-8 cursor-pointer", time === "allTime" ? "underline" : "")}>All Time</p>
+            <div className="flex text-white px-6 lg:pl-40 gap-4 text-lg lg:text-xl w-full justify-center lg:justify-start pt-20 ">
+              <p onClick={() => handleTimeChange('lastWeek')} className={cn("hover:underline underline-offset-8 cursor-pointer decoration-spotify-green", time === "lastWeek" ? "underline" : "")}>Week</p>
+              <p onClick={() => handleTimeChange('lastMonth')} className={cn("hover:underline underline-offset-8 cursor-pointer decoration-spotify-green", time === "lastMonth" ? "underline" : "")}> Month</p>
+              <p onClick={() => handleTimeChange('thisYear')} className={cn("hover:underline underline-offset-8 cursor-pointer decoration-spotify-green", time === "thisYear" ? "underline" : "")}>This Year</p>
+              <p onClick={() => handleTimeChange('allTime')} className={cn("hover:underline underline-offset-8 cursor-pointer decoration-spotify-green", time === "allTime" ? "underline" : "")}>Past Year</p>
+
             </div>
             <div className="w-full flex pt-12 px-6 lg:pl-40 gap-8">
               <div className="lg:w-10/12 w-full  flex flex-col gap-20">
@@ -86,9 +89,9 @@ export default function Home() {
                 <div className="flex gap-4 flex-col max-w-full pb-20">
                   <h2 className="text-4xl text-white font-bold pb-4">Top Stats</h2>
                   <div className="flex gap-8 flex-col lg:flex-row">
-                    <BlurFade className="w-full lg:w-1/3" delay={.25}><Leaderboard title="Top Artists" measures="Plays" data={spotifyStats!.artistAppearances} /></BlurFade>
-                    <BlurFade className="w-full lg:w-1/3" delay={.5}><Leaderboard title="Top Songs" measures="Plays" data={spotifyStats!.songAppearances} /></BlurFade>
-                    <BlurFade className="w-full lg:w-1/3" delay={.75}><Leaderboard title="Artists By the Numbers" measures="Plays" data={Object.fromEntries(spotifyStats!.minutesPerArtist.map(c => [c.artist, c.minutes]))} /></BlurFade>
+                    <BlurFade className="w-full lg:w-1/3" delay={.15}><Leaderboard title="Top Artists" measures="Plays" data={spotifyStats!.artistAppearances} /></BlurFade>
+                    <BlurFade className="w-full lg:w-1/3" delay={.3}><Leaderboard title="Top Songs" measures="Plays" data={spotifyStats!.songAppearances} /></BlurFade>
+                    <BlurFade className="w-full lg:w-1/3" delay={.45}><Leaderboard title="Artists By the Numbers" measures="Minutes" data={Object.fromEntries(spotifyStats!.minutesPerArtist.map(c => [c.artist, c.minutes]))} /></BlurFade>
                   </div>
                 </div>
               </div>

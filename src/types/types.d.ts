@@ -1,6 +1,8 @@
 export interface SpotifyData {
-    current: Stats;
+    thisYear: Stats;
     allTime: Stats;
+    lastMonth: Stats;
+    lastWeek: Stats;
     user: User;
 }
 
