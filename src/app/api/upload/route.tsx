@@ -50,7 +50,20 @@ export async function POST(req: any, res: any) {
     const zip = new AdmZip(filePath)
     zip.extractAllTo(fileDir, true)
 
-    const streamingHistory: Song[] = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/StreamingHistory_music_0.json"), 'utf-8'))
+    const files = fs.readdirSync(path.join(fileDir, "Spotify Account Data")).filter(file => file.startsWith('StreamingHistory_music'))
+
+    if (files.length === 0) {
+        return NextResponse.json({ error: 'No streaming history found' })
+    }
+
+    let streamingHistory: Song[] = []
+
+    for (const file of files) {
+        const data = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data", file), 'utf-8'))
+        streamingHistory = streamingHistory.concat(data)
+    }
+
+    //const streamingHistory: Song[] = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/StreamingHistory_music_0.json"), 'utf-8'))
     const thisYear = fetchDataTime(streamingHistory, 'thisYear')
     const allTime = fetchDataTime(streamingHistory, 'allTime')
     const lastMonth = fetchDataTime(streamingHistory, 'lastMonth')
@@ -58,7 +71,8 @@ export async function POST(req: any, res: any) {
 
     const userIdentity: Identity = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/Identity.json"), 'utf-8'))
     const displayName = userIdentity.displayName
-    const imageUrl = userIdentity.imageUrl
+    const imageUrl = userIdentity.largeImageUrl
+    console.log(imageUrl)
 
     const data = {
         thisYear,
@@ -70,8 +84,6 @@ export async function POST(req: any, res: any) {
             imageUrl
         }
     }
-
-    console.log(JSON.stringify(data))
 
     await deleteFolderRecursive(path.join(fileDir, "Spotify Account Data"))
     await fs.unlinkSync(filePath)
