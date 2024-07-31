@@ -1,17 +1,8 @@
 import { NextResponse } from "next/server";
 import fs, { writeFileSync } from 'fs';
-import { pipeline } from 'stream';
-import { promisify } from 'util';
-import { File } from "buffer";
 import AdmZip from 'adm-zip'
 import path from "path";
-
-interface Song {
-    endTime: string;
-    artistName: string;
-    trackName: string;
-    msPlayed: number;
-}
+import { NormalSong } from "@/types/types";
 
 interface Identity {
     displayName: string;
@@ -56,7 +47,7 @@ export async function POST(req: any, res: any) {
         return NextResponse.json({ error: 'No streaming history found' })
     }
 
-    let streamingHistory: Song[] = []
+    let streamingHistory: NormalSong[] = []
 
     for (const file of files) {
         const data = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data", file), 'utf-8'))
@@ -72,7 +63,6 @@ export async function POST(req: any, res: any) {
     const userIdentity: Identity = JSON.parse(fs.readFileSync(path.join(fileDir, "Spotify Account Data/Identity.json"), 'utf-8'))
     const displayName = userIdentity.displayName
     const imageUrl = userIdentity.largeImageUrl
-    console.log(imageUrl)
 
     const data = {
         thisYear,
@@ -105,8 +95,8 @@ const deleteFolderRecursive = (path: string) => {
     }
 };
 
-const fetchDataTime = (streamingHistory: Song[], time: string) => {
-    let songs: Song[] = [];
+const fetchDataTime = (streamingHistory: NormalSong[], time: string) => {
+    let songs: NormalSong[] = [];
 
     switch (time) {
         case 'thisYear':
@@ -123,7 +113,7 @@ const fetchDataTime = (streamingHistory: Song[], time: string) => {
             break;
     }
 
-    function topCategoryEntries(songs: Song[], key: 'artistName' | 'trackName', limit: number) {
+    function topCategoryEntries(songs: NormalSong[], key: 'artistName' | 'trackName', limit: number) {
         return Object.fromEntries(Object.entries(songs.map(c => c[key]).reduce<Record<string, number>>((acc, song) => {
             const key = song
             acc[key] = acc[key] ? ++acc[key] : acc[key] = 1, acc
